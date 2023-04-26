@@ -8,7 +8,9 @@ project(ros_monitoring)
 ## if COMPONENTS list like find_package(catkin REQUIRED COMPONENTS xyz)
 ## is used, also find other catkin packages
 find_package(catkin REQUIRED COMPONENTS
-  rospy
+   rospy
+   std_msgs
+   message_generation
 )
 
 ## System dependencies are found with CMake's conventions
@@ -104,6 +106,7 @@ catkin_package(
 #  LIBRARIES ros_monitoring
 #  CATKIN_DEPENDS rospy
 #  DEPENDS system_lib
+CATKIN_DEPENDS message_runtime
 )
 
 ###########

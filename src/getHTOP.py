@@ -5,17 +5,17 @@
 import rospy, bson, rosnode, rosgraph
 import psutil, os, json
 from datetime import datetime
-from ros_monitoring import _process
+from ros_monitoring import Process
 
 class getNodes:
     def __init__(self) -> None:
         rospy.init_node('robot_HTOP', anonymous=False)
-        pub = rospy.Publisher('pub_HTOP', _process, queue_size = 5)
+        pub = rospy.Publisher('pub_HTOP', Process, queue_size = 5)
 
         rate = rospy.Rate(1)
         while not rospy.is_shutdown():  
             try:           
-                process = _process()
+                process = Process()
                 process.cpu_percent = 0.1
                 pub.publish(process)
                 # data = []

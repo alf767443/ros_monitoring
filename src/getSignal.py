@@ -16,15 +16,13 @@ class getSignal:
         try:
             self.message_pub = rospy.Publisher("connectionStatus", SignalInformation, queue_size=10)
         except Exception as e:
-            rospy.logerr("Failure to create publisher")
-            rospy.logerr("An exception occurred:", type(e).__name__,e.args)
+            rospy.logerr("Failure to create publisher\nException occurred:", type(e).__name__,e.args)
 
         # Set the asynchronous loop
         try:
             self.loop = asyncio.get_event_loop()
         except:
-            rospy.logerr("Failure to asynchronous loop")
-            rospy.logerr("An exception occurred:", type(e).__name__,e.args)
+            rospy.logerr("Failure to asynchronous loop\nException occurred:", type(e).__name__,e.args)
         
         # Create the global lists
         try: 
@@ -42,15 +40,13 @@ class getSignal:
                 self.msg_list.append({'_id': i})
                 rospy.loginfo("Ping to: " + self.ip_list[i]['ip'] + ':' + str(self.ip_list[i]['port']))
         except:
-            rospy.logerr("Failure to create the global lists")
-            rospy.logerr("An exception occurred:", type(e).__name__,e.args)
+            rospy.logerr("Failure to create the global lists\nException occurred:", type(e).__name__,e.args)
         
         # Launches the ping_ips task asynchronously
         try:
             asyncio.run(self.ping_ips(self.ip_list))
         except:
-            rospy.logerr("Error on launch task asynchronously")
-            rospy.logerr("An exception occurred:", type(e).__name__,e.args)
+            rospy.logerr("Error on launch task asynchronously\nException occurred:", type(e).__name__,e.args)
 
         # Keeps the no alive
         rospy.spin()
@@ -115,15 +111,13 @@ class getSignal:
             # Adds the message list to the ping field in the ROS message
             _msg.ping = msg
         except Exception as e:
-            rospy.logerr("Error on convert ROS message")
-            rospy.logerr("An exception occurred:", type(e).__name__,e.args)
+            rospy.logerr("Error on convert ROS message\nException occurred:", type(e).__name__,e.args)
         
         # Publishes the message to the publisher
         try:    
             self.message_pub.publish(_msg)
         except Exception as e:
-            rospy.logerr("Error on publish the message")
-            rospy.logerr("An exception occurred:", type(e).__name__,e.args)
+            rospy.logerr("Error on publish the message\nException occurred:", type(e).__name__,e.args)
         
 
 # Performs a read of the listed ips

@@ -68,10 +68,6 @@ class getSignal:
                 interval=ip_dict['interval'])
             # Adds the ROS Info_ping message to the message list for the ip
             self.msg_list[ip_dict['_id']].update({'msg': self.ping2msg(ping=aping)})
-            # Publishes the updated message to the ROS publisher
-            print('==========================')
-            print(self.msg_list)
-            print('==========================')
         except Exception as e:
             rospy.logerr("Error on ping to " + ip_dict['ip'] + ':' + str(ip_dict['port']))
             rospy.logerr("An exception occurred:", type(e).__name__,e.args)
@@ -106,23 +102,18 @@ class getSignal:
 
 # Publishes the ROS SignalInfomation message to the defined topic via the publisher
     async def publish(self):
-        print(1)
+        
+        # Keeps the loop going as long as ROS coreprint is running
         while not rospy.is_shutdown():
             try:
-                print(11)
                 # Initiates the SignalInformation message 
                 msg = SignalInformation()
                 # Create a list with the informations
-                print('#############################')
-                print(self.msg_list)
                 list_msg = [message['msg'] for message in self.msg_list]
-                print(list_msg)
-                print('#############################')
                 # Adds the message list to the ping field in the ROS message
-                print(13)
                 msg.list = list_msg
             except KeyError:
-                await asyncio.sleep(0.5)
+                await asyncio.sleep(1)
                 continue
             except Exception as e:
                 rospy.logerr("Error on convert ROS message")
@@ -130,7 +121,6 @@ class getSignal:
             
             # Publishes the message to the publisher
             try:    
-                print(14)
                 self.message_pub.publish(msg)
             except Exception as e:
                 rospy.logerr("Error on publish the message")
@@ -138,21 +128,16 @@ class getSignal:
             finally:
                 await asyncio.sleep(0.5)
             
-        
-
 # Performs a read of the listed ips
     async def ping_ips(self):
-        print(2)
         # Keeps the loop going as long as ROS coreprint is running
         while not rospy.is_shutdown():
             # For all items of ip_list
             for item in self.ip_list:
-                print(21)
                 try:
                     # If no ping task exists for the _id of item create a task
                     if item['_id'] not in self.ping_tasks:
                         # Create a ping job for the item
-                        print(22)
                         self.ping_tasks[item['_id']] = asyncio.ensure_future(self.ping(ip_dict=item))
                         # Remove item from ip_list to decrease operations
                         self.ip_list.remove(item)
@@ -163,15 +148,15 @@ class getSignal:
             # Wait 0.1 s to start a new round of forcing so as not to overload processing
             await asyncio.sleep(0.1)
 
+# Main function
     async def main(self):
+        # Run the collect function and the publish
         await asyncio.gather(self.ping_ips(), self.publish())
-
 
 # On program interruption terminates asynchronous tasks
     def __del__(self):
         self.loop.stop()
         rospy.rospy.loginfo("Interrupted asynchronous tasks")
-        
 
 if __name__ == '__main__':
     try:

@@ -9,12 +9,17 @@ from pingList import IP2PING
 
 class getSignal:
     def __init__(self) -> None:
+        # Inicia o nó
         rospy.init_node('getConnectionStatus', anonymous=False)
-        self.pub = rospy.Publisher("connectionStatus", SignalInformation, queue_size=10)
+        # Cria o publisher das mensagens
+        self.message_pub = rospy.Publisher("connectionStatus", SignalInformation, queue_size=10)
+        # Define a 
         self.loop = asyncio.get_event_loop()
         self.ip_list = IP2PING.copy()  # Armazena a lista de IPs a serem pingados
         self.msg_list = [{}]
+        
 
+        
 
         for i in range(0,len(self.ip_list)):
             self.ip_list[i].update({'_id': i})
@@ -40,11 +45,11 @@ class getSignal:
                 count=ip_dict['count'],
                 interval=ip_dict['interval'])
             print(4)
-            self.msg_list[ip_dict['_id']].update({'msg': self.ping2msg(ping=aping, publisher=self.pub)})
+            self.msg_list[ip_dict['_id']].update({'msg': self.ping2msg(ping=aping, publisher=self.message_pub)})
             print(55)
             await asyncio.sleep(delay=ip_dict['interval'])
             print(555)
-            await self.publish()
+            await self.message_publish()
             self.ip_list.append(ip_dict)
         except Exception as e:
             print(e)
@@ -87,7 +92,7 @@ class getSignal:
         print(12021)
         _msg.ping = msg
         print(120210)
-        self.pub.publish(_msg)
+        self.message_pub.publish(_msg)
         print(120212)
 
 

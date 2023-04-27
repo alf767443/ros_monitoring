@@ -9,4 +9,3 @@ float32 rtt_min
 float32 rtt_avg
 
 string ip_target
-string ip_source

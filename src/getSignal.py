@@ -28,8 +28,12 @@ class getSignal:
                 count=ip_dict['count'],
                 interval=ip_dict['interval'])
             print(4)
-            await asyncio.sleep(delay=ip_dict['interval'], result=self.ping2msg(ping=aping, publisher=self.pub))
+            await asyncio.sleep(delay=ip_dict['interval'])
             print(5)
+            self.ping2msg(ping=aping, publisher=self.pub)
+            print(55)
+            await self.ping(ip_dict=ip_dict)
+            print(555)
         except Exception as e:
             print(e)
 

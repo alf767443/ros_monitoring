@@ -122,6 +122,7 @@ class getSignal:
                 print(13)
                 msg.list = list_msg
             except KeyError:
+                await asyncio.sleep(0.5)
                 continue
             except Exception as e:
                 rospy.logerr("Error on convert ROS message")
@@ -135,7 +136,7 @@ class getSignal:
                 rospy.logerr("Error on publish the message")
                 rospy.logerr("An exception occurred:", type(e).__name__,e.args)
             finally:
-                await asyncio.sleep(0.1)
+                await asyncio.sleep(0.5)
             
         
 

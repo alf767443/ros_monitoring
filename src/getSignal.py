@@ -31,7 +31,7 @@ class getSignal:
             # Copy the list of ips and settings defined in the pingList file
             self.ip_list = IP2PING.copy()
             # Creates an empty list to store the messages
-            self.msg_list = [{}]
+            self.msg_list = []
             # Create an empty list for asynchronous tasks
             self.ping_tasks = {}
             # Add verification keys to the lists of ips and messages

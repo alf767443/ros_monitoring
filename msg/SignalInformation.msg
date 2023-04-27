@@ -1,2 +1,3 @@
+Info_ping[] list
+
 string ip_source
-Info_ping[] ping

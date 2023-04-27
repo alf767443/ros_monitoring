@@ -41,12 +41,12 @@ class getSignal:
             _msg = SignalInformation()
             _msg.is_alive = ping.is_alive
             _msg.packets_sent = ping.packets_sent
-            _msg.packet_loss = ping.packet_loss
+            _msg.packets_loss = ping.packet_loss
             _msg.packets_received = ping.packets_received
             _msg.port = ping.port
-            _msg.max_rtt = ping.max_rtt
-            _msg.min_rtt = ping.min_rtt
-            _msg.avg_rtt = ping.avg_rtt
+            _msg.rtt_max = ping.max_rtt
+            _msg.rtt_min = ping.min_rtt
+            _msg.rtt_avg = ping.avg_rtt
             _msg.ip_address = ping.ip_address
             print(6)
             publisher.publish(_msg)

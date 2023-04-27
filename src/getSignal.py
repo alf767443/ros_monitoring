@@ -117,7 +117,7 @@ class getSignal:
                 print(13)
                 msg.list = list_msg
             except KeyError:
-                return False
+                continue
             except Exception as e:
                 rospy.logerr("Error on convert ROS message")
                 rospy.logerr("An exception occurred:", type(e).__name__,e.args)

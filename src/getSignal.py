@@ -12,9 +12,14 @@ class getSignal:
         rospy.init_node('getConnectionStatus', anonymous=False)
         self.pub = rospy.Publisher("connectionStatus", SignalInformation, queue_size=10)
         self.loop = asyncio.get_event_loop()
+        self.ip_list = IP2PING.copy()  # Armazena a lista de IPs a serem pingados
+        # self.ping_tasks = {}  # Dicionário que mapeia os IPs para as tarefas de ping
+
         print(1)
-        # Inicia a tarefa assíncrona
-        self.loop.run_until_complete(self.ping_ips(IP2PING))
+        
+        asyncio.ensure_future(self.ping_ips(self.ip_list))  # Inicia a tarefa assíncrona para pingar os IPs
+        
+        
         print(2)
         rospy.spin()
 
@@ -28,12 +33,13 @@ class getSignal:
                 count=ip_dict['count'],
                 interval=ip_dict['interval'])
             print(4)
-            await asyncio.sleep(delay=ip_dict['interval'])
+            await self.ping(ip_dict=ip_dict)
             print(5)
             self.ping2msg(ping=aping, publisher=self.pub)
             print(55)
-            await self.ping(ip_dict=ip_dict)
+            await asyncio.sleep(delay=ip_dict['interval'])
             print(555)
+            self.ip_list.append(ip_dict)
         except Exception as e:
             print(e)
 
@@ -43,7 +49,7 @@ class getSignal:
             _msg = SignalInformation()
             _msg.is_alive = int(ping.is_alive)
             _msg.packets_sent = ping.packets_sent
-            _msg.packets_loss = ping.packet_loss
+            _msg.packets_loss = int(ping.packet_loss)
             _msg.packets_received = ping.packets_received
             _msg.port = ping.port
             _msg.rtt_max = ping.max_rtt
@@ -56,11 +62,11 @@ class getSignal:
             print(e)
 
     async def ping_ips(self, ip_list):
-        for ip in ip_list:
-            print(0)
-            await self.ping(ip_dict=ip)
-            print(101)
-        print(111)
+         while not rospy.is_shutdown():  # Executa enquanto o roscore estiver ativo
+            for ip in self.ip_list:
+                self.ping_tasks[ip] = asyncio.ensure_future(self.ping(ip_dict=ip))
+                self.ip_list.remove(ip)
+                await asyncio.sleep(0.1)
         
     def __del__(self):
         self.loop.stop()

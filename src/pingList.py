@@ -8,4 +8,11 @@ IP2PING = [
      'port':        22, 
      'interval':    1,
      'timeout':     2, 
+     'count':       5,},
+
+    {'name':        'Self',
+     'ip':          '127.0.0.1',
+     'port':        22, 
+     'interval':    1,
+     'timeout':     2, 
      'count':       5,}]

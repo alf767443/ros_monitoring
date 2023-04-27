@@ -16,13 +16,15 @@ class getSignal:
         try:
             self.message_pub = rospy.Publisher("connectionStatus", SignalInformation, queue_size=10)
         except Exception as e:
-            rospy.logerr("Failure to create publisher\nException occurred:", type(e).__name__,e.args)
+            rospy.logerr("Failure to create publisher")
+            rospy.logerr("An exception occurred:", type(e).__name__,e.args)
 
         # Set the asynchronous loop
         try:
             self.loop = asyncio.get_event_loop()
         except:
-            rospy.logerr("Failure to asynchronous loop\nException occurred:", type(e).__name__,e.args)
+            rospy.logerr("Failure to asynchronous loop")
+            rospy.logerr("An exception occurred:", type(e).__name__,e.args)
         
         # Create the global lists
         try: 
@@ -40,13 +42,15 @@ class getSignal:
                 self.msg_list.append({'_id': i})
                 rospy.loginfo("Ping to: " + self.ip_list[i]['ip'] + ':' + str(self.ip_list[i]['port']))
         except:
-            rospy.logerr("Failure to create the global lists\nException occurred:", type(e).__name__,e.args)
+            rospy.logerr("Failure to create the global lists")
+            rospy.logerr("An exception occurred:", type(e).__name__,e.args)
         
         # Launches the ping_ips task asynchronously
         try:
             asyncio.run(self.ping_ips(self.ip_list))
         except:
-            rospy.logerr("Error on launch task asynchronously\nException occurred:", type(e).__name__,e.args)
+            rospy.logerr("Error on launch task asynchronously")
+            rospy.logerr("An exception occurred:", type(e).__name__,e.args)
 
         # Keeps the no alive
         rospy.spin()
@@ -66,7 +70,8 @@ class getSignal:
             # Publishes the updated message to the ROS publisher
             await self.publish()
         except Exception as e:
-            rospy.logerr("Error on ping to " + ip_dict['ip'] + ':' + str(ip_dict['port']) + "\nException occurred:", type(e).__name__,e.args)
+            rospy.logerr("Error on ping to " + ip_dict['ip'] + ':' + str(ip_dict['port']))
+            rospy.logerr("An exception occurred:", type(e).__name__,e.args)
         finally:
             # Wait one more interval cycle to release finish the function
             await asyncio.sleep(delay=ip_dict['interval'])
@@ -93,7 +98,8 @@ class getSignal:
             # Returns the converted message
             return _msg
         except Exception as e:
-            rospy.logerr("Error on convert ping to message: " + ping.ip_address + ':' + ping.port + "\nException occurred:", type(e).__name__,e.args)
+            rospy.logerr("Error on convert ping to message: " + ping.ip_address + ':' + ping.port)
+            rospy.logerr("An exception occurred:", type(e).__name__,e.args)
 
 # Publishes the ROS SignalInfomation message to the defined topic via the publisher
     async def publish(self):
@@ -109,13 +115,15 @@ class getSignal:
             # Adds the message list to the ping field in the ROS message
             _msg.ping = msg
         except Exception as e:
-            rospy.logerr("Error on convert ROS message\nException occurred:", type(e).__name__,e.args)
+            rospy.logerr("Error on convert ROS message")
+            rospy.logerr("An exception occurred:", type(e).__name__,e.args)
         
         # Publishes the message to the publisher
         try:    
             self.message_pub.publish(_msg)
         except Exception as e:
-            rospy.logerr("Error on publish the message\nException occurred:", type(e).__name__,e.args)
+            rospy.logerr("Error on publish the message")
+            rospy.logerr("An exception occurred:", type(e).__name__,e.args)
         
 
 # Performs a read of the listed ips
@@ -132,7 +140,8 @@ class getSignal:
                         # Remove item from ip_list to decrease operations
                         self.ip_list.remove(item)
                 except Exception as e:
-                    rospy.logerr("Error create the ping task to " + item['ip'] + ':' + str(item['port'])  + "\nException occurred:", type(e).__name__,e.args)
+                    rospy.logerr("Error create the ping task to " + item['ip'] + ':' + str(item['port']))
+                    rospy.logerr("An exception occurred:", type(e).__name__,e.args)
                 
             # Wait 0.1 s to start a new round of forcing so as not to overload processing
             await asyncio.sleep(0.1)

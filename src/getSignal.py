@@ -76,6 +76,7 @@ class getSignal:
                 if ip['_id'] not in self.ping_tasks:
                     print(8)
                     self.ping_tasks[ip['_id']] = asyncio.ensure_future(self.ping(ip_dict=ip))
+                    self.ip_list.remove(ip)
                     print(9)
                 print(99)
         await asyncio.sleep(0.1)

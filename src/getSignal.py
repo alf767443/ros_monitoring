@@ -106,12 +106,8 @@ class getSignal:
         try:
             # Initiates the SignalInformation message 
             msg = SignalInformation()
-            # Start an empty list of Info_ping messages
+            # Create a list with the informations
             list_msg = [message['msg'] for message in self.msg_list]
-            # Fills the msg list with the messages in the list self.msg_list
-            # for item in self.msg_list:
-                # Adds the message to the _msg list
-                # msg.append(item['msg'])
             # Adds the message list to the ping field in the ROS message
             msg.list = list_msg
         except Exception as e:

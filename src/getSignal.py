@@ -69,7 +69,7 @@ class getSignal:
             # Adds the ROS Info_ping message to the message list for the ip
             self.msg_list[ip_dict['_id']].update({'msg': self.ping2msg(ping=aping, publisher=self.message_pub)})
             # Publishes the updated message to the ROS publisher
-            await self.message_publish()
+            await self.publish()
             # Wait one more interval cycle to release finish the function
             await asyncio.sleep(delay=ip_dict['interval'])
         except Exception as e:

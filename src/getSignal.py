@@ -110,6 +110,8 @@ class getSignal:
             list_msg = [message['msg'] for message in self.msg_list]
             # Adds the message list to the ping field in the ROS message
             msg.list = list_msg
+        except KeyError:
+            pass
         except Exception as e:
             print(e)
             rospy.logerr("Error on convert ROS message")

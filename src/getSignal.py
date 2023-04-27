@@ -40,7 +40,7 @@ class getSignal:
                 count=ip_dict['count'],
                 interval=ip_dict['interval'])
             print(4)
-            self.msg_list(
+            self.msg_list['_id'].update(
                 {'_id': ip_dict['_id'],
                  'msg': self.ping2msg(ping=aping, publisher=self.pub)})
             print(55)

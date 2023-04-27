@@ -102,33 +102,37 @@ class getSignal:
             rospy.logerr("An exception occurred:", type(e).__name__,e.args)
 
 # Publishes the ROS SignalInfomation message to the defined topic via the publisher
-    def publish(self):
-        try:
-            # Initiates the SignalInformation message 
-            msg = SignalInformation()
-            # Create a list with the informations
-            list_msg = [message['msg'] for message in self.msg_list]
-            # Adds the message list to the ping field in the ROS message
-            msg.list = list_msg
-        except KeyError:
-            return False
-        except Exception as e:
-            rospy.logerr("Error on convert ROS message")
-            rospy.logerr("An exception occurred:", type(e).__name__,e.args)
-        
-        # Publishes the message to the publisher
-        try:    
-            self.message_pub.publish(msg)
-        except Exception as e:
-            rospy.logerr("Error on publish the message")
-            rospy.logerr("An exception occurred:", type(e).__name__,e.args)
+    async def publish(self):
+        rospy.rate(1)
+        while not rospy.is_shutdown():
+            try:
+                # Initiates the SignalInformation message 
+                msg = SignalInformation()
+                # Create a list with the informations
+                list_msg = [message['msg'] for message in self.msg_list]
+                # Adds the message list to the ping field in the ROS message
+                msg.list = list_msg
+            except KeyError:
+                return False
+            except Exception as e:
+                rospy.logerr("Error on convert ROS message")
+                rospy.logerr("An exception occurred:", type(e).__name__,e.args)
+            
+            # Publishes the message to the publisher
+            try:    
+                self.message_pub.publish(msg)
+            except Exception as e:
+                rospy.logerr("Error on publish the message")
+                rospy.logerr("An exception occurred:", type(e).__name__,e.args)
+            rospy.sleep()
+            
         
 
 # Performs a read of the listed ips
     async def ping_ips(self, ip_list):
+        pub = asyncio.ensure_future(self.ping(ip_dict=item))
         # Keeps the loop going as long as ROS coreprint is running
         while not rospy.is_shutdown():
-            self.publish()
             # For all items of ip_list
             for item in self.ip_list:
                 try:

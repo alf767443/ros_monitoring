@@ -26,6 +26,7 @@ class getSignal:
         print(1)
         
         asyncio.run(self.ping_ips(self.ip_list))  # Inicia a tarefa assíncrona para pingar os IPs
+        print(1012120)
         asyncio.run(self.publish())
         print(2)
         rospy.spin()

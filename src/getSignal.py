@@ -12,10 +12,12 @@ class getSignal:
         rospy.init_node('getConnectionStatus', anonymous=False)
         pub = rospy.Publisher("connectionStatus", SignalInformation, queue_size=10)
         rate = rospy.Rate(1)
+        
+        for ip in IP2PING:
+            asyncio.ensure_future(self.ping(ip_dict=ip))
 
-        while not rospy.is_shutdown():
-            for ip in IP2PING:
-                self.ping(ip_dict=ip)
+        rospy.spin()
+            
 
     async def ping(self, ip_dict: dict):
         try:

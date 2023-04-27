@@ -45,11 +45,11 @@ class getSignal:
             print(55)
             await asyncio.sleep(delay=ip_dict['interval'])
             print(555)
+            await self.publish()
             self.ip_list.append(ip_dict)
         except Exception as e:
             print(e)
         finally:
-            await self.publish()
             del self.ping_tasks[ip_dict['_id']]  # Remove a tarefa do dicionário de tarefas de ping
 
     def ping2msg(self, ping: models.TCPHost, publisher: rospy.Publisher):

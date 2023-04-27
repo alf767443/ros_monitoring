@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 
 from tcppinglib import async_tcpping, models
-from ros_monitoring.msg import SignalInformation
+from ros_monitoring.msg import SignalInformation, Info_ping
 
 import rospy, asyncio
 
@@ -55,7 +55,7 @@ class getSignal:
     def ping2msg(self, ping: models.TCPHost, publisher: rospy.Publisher):
         try:
             print(6)
-            _msg = SignalInformation()
+            _msg = Info_ping()
             _msg.is_alive = int(ping.is_alive)
             _msg.packets_sent = int(ping.packets_sent)
             _msg.packets_loss = int(ping.packet_loss)
@@ -71,10 +71,13 @@ class getSignal:
             print(e)
 
     async def publish(self):
+        _msg = SignalInformation()
+        _msg.ping
         msg = []
-        for _msg in self.msg_list:
-            msg.append(_msg['msg'])
-        self.pub.publish(msg)
+        for i in self.msg_list:
+            msg.append(i['msg'])
+        _msg.ping = msg
+        self.pub.publish(_msg)
 
 
     async def ping_ips(self, ip_list):

@@ -111,15 +111,15 @@ class getSignal:
             # Adds the message list to the ping field in the ROS message
             msg.list = list_msg
         except KeyError:
-            pass
+            return False
         except Exception as e:
-            print(e)
             rospy.logerr("Error on convert ROS message")
             rospy.logerr("An exception occurred:", type(e).__name__,e.args)
         
         # Publishes the message to the publisher
         try:    
             self.message_pub.publish(msg)
+            rospy.spinOnce()
         except Exception as e:
             rospy.logerr("Error on publish the message")
             rospy.logerr("An exception occurred:", type(e).__name__,e.args)
@@ -127,7 +127,7 @@ class getSignal:
 
 # Performs a read of the listed ips
     async def ping_ips(self, ip_list):
-        # Keeps the loop going as long as ROS core is running
+        # Keeps the loop going as long as ROS coreprint is running
         while not rospy.is_shutdown():
             # For all items of ip_list
             for item in self.ip_list:

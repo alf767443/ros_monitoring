@@ -24,10 +24,9 @@ class getSignal:
         self.ping_tasks = {}  # Dicionário que mapeia os IPs para as tarefas de ping
 
         print(1)
-        
-        asyncio.ensure_future(self.publish())
+
         asyncio.run(self.ping_ips(self.ip_list))  # Inicia a tarefa assíncrona para pingar os IPs
-        print(1012120)
+        
         print(2)
         rospy.spin()
 
@@ -78,10 +77,13 @@ class getSignal:
         print(1200)
         msg = []
         print(12000)
-        for i in self.msg_list:
-            print(121)
-            msg.append(i['msg'])
-            print(i)
+        try:
+            for i in self.msg_list:
+                print(121)
+                msg.append(i['msg'])
+                print(i)
+        except Exception as e:
+            print(e)
         print(12021)
         _msg.ping = msg
         print(120210)

@@ -130,7 +130,7 @@ class getSignal:
 
 # Performs a read of the listed ips
     async def ping_ips(self, ip_list):
-        pub = asyncio.ensure_future(self.ping(ip_dict=item))
+        pub = asyncio.ensure_future(self.publish())
         # Keeps the loop going as long as ROS coreprint is running
         while not rospy.is_shutdown():
             # For all items of ip_list

@@ -1,42 +1,52 @@
 #!/usr/bin/env python3
 
-from GlobalSets.Mongo import DataSource as Source, Clients, DataBases as db, Collections as col
 from GlobalSets.localSave import createFile
-from tcppinglib import tcpping
+from tcppinglib import tcpping, async_tcpping, models
+from ros_monitoring.msg import SignalInformation
 
-import rospy, bson
-import datetime
+import rospy, asyncio
 
-dataPath = {
-    'dataSource': Source.CeDRI_UGV, 
-    'dataBase'  : db.dataLake,
-    'collection': col.Connection
-}
+from ..pingList import IP2PING
 
 class getSignal:
     def __init__(self) -> None:
-        rospy.init_node('getSignal', anonymous=False)
+        rospy.init_node('getConnectionStatus', anonymous=False)
+        pub = rospy.Publisher("connectionStatus", SignalInformation, queue_size=10)
         rate = rospy.Rate(1)
-        while not rospy.is_shutdown():
-            try:
-                (isAlive , RTT) = self.getInfo(ip=Clients.ip, port=Clients.port)
-                data = {
-                    'dateTime': datetime.datetime.now(),
-                    'Connect': isAlive,
-                    'RTT': RTT
-                }
-                
-                createFile(dataPath=dataPath, content=data) 
-            except Exception as e:
-                print(e)
-            rate.sleep()
 
-    def getInfo(self, ip: str, port: int):
+        while not rospy.is_shutdown():
+            for ip in IP2PING:
+                self.ping(ip_dict=ip)
+
+    async def ping(self, ip_dict: dict):
         try:
-            ping = tcpping(address=ip, port=port, interval=1, timeout=2, count=5)
+            aping = await async_tcpping(
+                address=ip_dict['ip'], 
+                port=ip_dict['port'],
+                timeout=ip_dict['timeout'],
+                count=ip_dict['count'],
+                interval=ip_dict['interval'])
+            self.ping2msg(ping=aping)
+            self.ping(ip_dict=ip_dict)
         except Exception as e:
             print(e)
-        return(ping.is_alive, ping.avg_rtt)
+
+    def ping2msg(self, ping: models.TCPHost,publisher: rospy.Publisher):
+        try:
+            _msg = SignalInformation()
+            _msg.is_alive = ping.is_alive
+            _msg.packets_sent = ping.packets_sent
+            _msg.packet_loss = ping.packet_loss
+            _msg.packets_received = ping.packets_received
+            _msg.port = ping.port
+            _msg.max_rtt = ping.max_rtt
+            _msg.min_rtt = ping.min_rtt
+            _msg.avg_rtt = ping.avg_rtt
+            _msg.ip_address = ping.ip_address
+            
+            publisher.publish(_msg)
+        except Exception as e:
+            print(e)
 
 if __name__ == '__main__':
     try:

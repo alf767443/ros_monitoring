@@ -38,8 +38,6 @@ class getSignal:
                 count=ip_dict['count'],
                 interval=ip_dict['interval'])
             print(4)
-            await self.ping(ip_dict=ip_dict)
-            print(5)
             self.ping2msg(ping=aping, publisher=self.pub)
             print(55)
             await asyncio.sleep(delay=ip_dict['interval'])
@@ -70,7 +68,6 @@ class getSignal:
 
     async def ping_ips(self, ip_list):
         while not rospy.is_shutdown():  # Executa enquanto o roscore estiver ativo
-            print(999)
             for ip in self.ip_list:
                 print(ip)
                 if ip['_id'] not in self.ping_tasks:
@@ -79,7 +76,7 @@ class getSignal:
                     self.ip_list.remove(ip)
                     print(9)
                 print(99)
-        await asyncio.sleep(0.1)
+            await asyncio.sleep(0.1)
         
     def __del__(self):
         self.loop.stop()

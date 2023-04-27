@@ -13,6 +13,8 @@ class getSignal:
         self.pub = rospy.Publisher("connectionStatus", SignalInformation, queue_size=10)
         self.loop = asyncio.get_event_loop()
         self.ip_list = IP2PING.copy()  # Armazena a lista de IPs a serem pingados
+        self.msg_list = []
+
 
         for i in range(0,len(self.ip_list)):
             self.ip_list[i].update({'_id': i})
@@ -23,7 +25,7 @@ class getSignal:
         print(1)
         
         asyncio.run(self.ping_ips(self.ip_list))  # Inicia a tarefa assíncrona para pingar os IPs
-        
+        asyncio.run(self.publish())
         
         print(2)
         rospy.spin()
@@ -38,7 +40,9 @@ class getSignal:
                 count=ip_dict['count'],
                 interval=ip_dict['interval'])
             print(4)
-            self.ping2msg(ping=aping, publisher=self.pub)
+            self.msg_list(
+                {'_id': ip_dict['_id'],
+                 'msg': self.ping2msg(ping=aping, publisher=self.pub)})
             print(55)
             await asyncio.sleep(delay=ip_dict['interval'])
             print(555)
@@ -53,18 +57,25 @@ class getSignal:
             print(6)
             _msg = SignalInformation()
             _msg.is_alive = int(ping.is_alive)
-            _msg.packets_sent = ping.packets_sent
+            _msg.packets_sent = int(ping.packets_sent)
             _msg.packets_loss = int(ping.packet_loss)
-            _msg.packets_received = ping.packets_received
+            _msg.packets_received = int(ping.packets_received)
             _msg.port = ping.port
             _msg.rtt_max = ping.max_rtt
             _msg.rtt_min = ping.min_rtt
             _msg.rtt_avg = ping.avg_rtt
             _msg.ip_target = ping.ip_address
             print(7)
-            publisher.publish(_msg)
+            return _msg
         except Exception as e:
             print(e)
+
+    async def publish(self):
+        msg = []
+        for _msg in self.msg_list:
+            msg.append(_msg['msg'])
+        self.pub.publish(msg)
+
 
     async def ping_ips(self, ip_list):
         while not rospy.is_shutdown():  # Executa enquanto o roscore estiver ativo

@@ -14,7 +14,7 @@ class getSignal:
         self.loop = asyncio.get_event_loop()
         print(1)
         # Inicia a tarefa assíncrona
-        asyncio.run(self.ping_ips(IP2PING))
+        self.loop.run_until_complete(self.ping_ips(IP2PING))
         print(2)
         rospy.spin()
 
@@ -28,16 +28,15 @@ class getSignal:
                 count=ip_dict['count'],
                 interval=ip_dict['interval'])
             print(4)
+            await asyncio.sleep(ip_dict['interval'])
             self.ping2msg(ping=aping, publisher=self.pub)
-            print(44)
-            self.ping(ip_dict=ip_dict)
-            print(9999999999999999)
+            print(5)
         except Exception as e:
             print(e)
 
     def ping2msg(self, ping: models.TCPHost, publisher: rospy.Publisher):
         try:
-            print(5)
+            print(6)
             _msg = SignalInformation()
             _msg.is_alive = ping.is_alive
             _msg.packets_sent = ping.packets_sent
@@ -48,9 +47,8 @@ class getSignal:
             _msg.rtt_min = ping.min_rtt
             _msg.rtt_avg = ping.avg_rtt
             _msg.ip_target = ping.ip_address
-            print(6)
-            publisher.publish(_msg)
             print(7)
+            publisher.publish(_msg)
         except Exception as e:
             print(e)
 
@@ -59,7 +57,6 @@ class getSignal:
             print(0)
             await self.ping(ip_dict=ip)
             print(101)
-            await asyncio.sleep(0.1)
         print(111)
 
 if __name__ == '__main__':

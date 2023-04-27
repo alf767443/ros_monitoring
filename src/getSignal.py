@@ -18,7 +18,7 @@ class getSignal:
 
         for i in range(0,len(self.ip_list)):
             self.ip_list[i].update({'_id': i})
-            self.msg_list[i].update({'_id': i})
+            self.msg_list.append({'_id': i})
             print(self.ip_list[i])
 
         self.ping_tasks = {}  # Dicionário que mapeia os IPs para as tarefas de ping

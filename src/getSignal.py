@@ -49,6 +49,7 @@ class getSignal:
         except Exception as e:
             print(e)
         finally:
+            await self.publish()
             del self.ping_tasks[ip_dict['_id']]  # Remove a tarefa do dicionário de tarefas de ping
 
     def ping2msg(self, ping: models.TCPHost, publisher: rospy.Publisher):
@@ -70,24 +71,22 @@ class getSignal:
             print(e)
 
     async def publish(self):
-        while not rospy.is_shutdown():  # Exec
-            print(12)
-            _msg = SignalInformation()
-            print(120)
-            _msg.ping
-            print(1200)
-            msg = []
-            print(12000)
-            for i in self.msg_list:
-                print(121)
-                msg.append(i['msg'])
-                print(i)
-            print(12021)
-            _msg.ping = msg
-            print(120210)
-            self.pub.publish(_msg)
-            print(120212)
-            asyncio.sleep(1)
+        print(12)
+        _msg = SignalInformation()
+        print(120)
+        _msg.ping
+        print(1200)
+        msg = []
+        print(12000)
+        for i in self.msg_list:
+            print(121)
+            msg.append(i['msg'])
+            print(i)
+        print(12021)
+        _msg.ping = msg
+        print(120210)
+        self.pub.publish(_msg)
+        print(120212)
 
 
     async def ping_ips(self, ip_list):

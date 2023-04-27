@@ -38,7 +38,7 @@ class getSignal:
         try:
             print(6)
             _msg = SignalInformation()
-            _msg.is_alive = ping.is_alive
+            _msg.is_alive = int(ping.is_alive)
             _msg.packets_sent = ping.packets_sent
             _msg.packets_loss = ping.packet_loss
             _msg.packets_received = ping.packets_received
@@ -58,6 +58,9 @@ class getSignal:
             await self.ping(ip_dict=ip)
             print(101)
         print(111)
+        
+    def __del__(self):
+        self.loop.stop()
 
 if __name__ == '__main__':
     try:

@@ -68,7 +68,7 @@ class getSignal:
             # Adds the ROS Info_ping message to the message list for the ip
             self.msg_list[ip_dict['_id']].update({'msg': self.ping2msg(ping=aping)})
             # Publishes the updated message to the ROS publisher
-            self.publish()
+            # self.publish()
         except Exception as e:
             rospy.logerr("Error on ping to " + ip_dict['ip'] + ':' + str(ip_dict['port']))
             rospy.logerr("An exception occurred:", type(e).__name__,e.args)
@@ -128,6 +128,7 @@ class getSignal:
     async def ping_ips(self, ip_list):
         # Keeps the loop going as long as ROS coreprint is running
         while not rospy.is_shutdown():
+            self.publish()
             # For all items of ip_list
             for item in self.ip_list:
                 try:

@@ -47,7 +47,7 @@ class getSignal:
             _msg.rtt_max = ping.max_rtt
             _msg.rtt_min = ping.min_rtt
             _msg.rtt_avg = ping.avg_rtt
-            _msg.ip_address = ping.ip_address
+            _msg.ip_target = ping.ip_address
             print(6)
             publisher.publish(_msg)
             print(7)

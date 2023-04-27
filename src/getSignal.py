@@ -72,12 +72,12 @@ class getSignal:
             await self.message_publish()
             # Wait one more interval cycle to release finish the function
             await asyncio.sleep(delay=ip_dict['interval'])
-            # Add to ip_list the dictionary that was removed
-            self.ip_list.append(ip_dict)
         except Exception as e:
             rospy.logerr("Error on ping to " + ip_dict['ip'] + ':' + str(ip_dict['port']))
             rospy.logerr("An exception occurred:", type(e).__name__,e.args)
         finally:
+            # Add to ip_list the dictionary that was removed
+            self.ip_list.append(ip_dict)
             # Deletes the task from the task list
             del self.ping_tasks[ip_dict['_id']]
 

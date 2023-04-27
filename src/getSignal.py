@@ -119,7 +119,6 @@ class getSignal:
         # Publishes the message to the publisher
         try:    
             self.message_pub.publish(msg)
-            rospy.spinOnce()
         except Exception as e:
             rospy.logerr("Error on publish the message")
             rospy.logerr("An exception occurred:", type(e).__name__,e.args)

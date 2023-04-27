@@ -13,11 +13,12 @@ class getSignal:
         self.pub = rospy.Publisher("connectionStatus", SignalInformation, queue_size=10)
         self.loop = asyncio.get_event_loop()
         self.ip_list = IP2PING.copy()  # Armazena a lista de IPs a serem pingados
-        self.msg_list = []
+        self.msg_list = [{}]
 
 
         for i in range(0,len(self.ip_list)):
             self.ip_list[i].update({'_id': i})
+            self.msg_list[i].update({'_id': i})
             print(self.ip_list[i])
 
         self.ping_tasks = {}  # Dicionário que mapeia os IPs para as tarefas de ping
@@ -40,9 +41,7 @@ class getSignal:
                 count=ip_dict['count'],
                 interval=ip_dict['interval'])
             print(4)
-            self.msg_list['_id'].update(
-                {'_id': ip_dict['_id'],
-                 'msg': self.ping2msg(ping=aping, publisher=self.pub)})
+            self.msg_list[ip_dict['_id']].update({'msg': self.ping2msg(ping=aping, publisher=self.pub)})
             print(55)
             await asyncio.sleep(delay=ip_dict['interval'])
             print(555)

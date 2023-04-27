@@ -13,7 +13,12 @@ class getSignal:
         self.pub = rospy.Publisher("connectionStatus", SignalInformation, queue_size=10)
         self.loop = asyncio.get_event_loop()
         self.ip_list = IP2PING.copy()  # Armazena a lista de IPs a serem pingados
-        # self.ping_tasks = {}  # Dicionário que mapeia os IPs para as tarefas de ping
+
+        for i in range(0,len(self.ip_list)):
+            self.ip_list[i].update({'_id': i})
+            print(self.ip_list[i])
+
+        self.ping_tasks = {}  # Dicionário que mapeia os IPs para as tarefas de ping
 
         print(1)
         
@@ -64,7 +69,7 @@ class getSignal:
     async def ping_ips(self, ip_list):
          while not rospy.is_shutdown():  # Executa enquanto o roscore estiver ativo
             for ip in self.ip_list:
-                await self.ping(ip_dict=ip)
+                self.ping_tasks[ip['_id']] = asyncio.ensure_future(self.ping(ip_dict=ip))
                 self.ip_list.remove(ip)
             await asyncio.sleep(0.1)
         

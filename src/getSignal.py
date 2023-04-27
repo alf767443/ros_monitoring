@@ -134,7 +134,8 @@ class getSignal:
             except Exception as e:
                 rospy.logerr("Error on publish the message")
                 rospy.logerr("An exception occurred:", type(e).__name__,e.args)
-            rospy.sleep(1)
+            finally:
+                await asyncio.sleep(0.1)
             
         
 

@@ -1,7 +1,6 @@
 #!/usr/bin/env python3
 
-from GlobalSets.localSave import createFile
-from tcppinglib import tcpping, async_tcpping, models
+from tcppinglib import async_tcpping, models
 from ros_monitoring.msg import SignalInformation
 
 import rospy, asyncio

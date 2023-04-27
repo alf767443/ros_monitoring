@@ -104,7 +104,6 @@ class getSignal:
 
 # Publishes the ROS SignalInfomation message to the defined topic via the publisher
     async def publish(self):
-        rospy.rate(1)
         while not rospy.is_shutdown():
             try:
                 # Initiates the SignalInformation message 
@@ -125,7 +124,7 @@ class getSignal:
             except Exception as e:
                 rospy.logerr("Error on publish the message")
                 rospy.logerr("An exception occurred:", type(e).__name__,e.args)
-            rospy.sleep()
+            rospy.sleep(1)
             
         
 

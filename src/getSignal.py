@@ -10,14 +10,13 @@ from pingList import IP2PING
 class getSignal:
     def __init__(self) -> None:
         rospy.init_node('getConnectionStatus', anonymous=False)
-        pub = rospy.Publisher("connectionStatus", SignalInformation, queue_size=10)
-        rate = rospy.Rate(1)
-        
-        for ip in IP2PING:
-            asyncio.ensure_future(self.ping(ip_dict=ip))
+        self.pub = rospy.Publisher("connectionStatus", SignalInformation, queue_size=10)
+        self.loop = asyncio.get_event_loop()
+
+        # Inicia a tarefa assíncrona
+        self.loop.create_task(self.ping_ips(IP2PING))
 
         rospy.spin()
-            
 
     async def ping(self, ip_dict: dict):
         try:
@@ -27,12 +26,11 @@ class getSignal:
                 timeout=ip_dict['timeout'],
                 count=ip_dict['count'],
                 interval=ip_dict['interval'])
-            self.ping2msg(ping=aping)
-            self.ping(ip_dict=ip_dict)
+            self.ping2msg(ping=aping, publisher=self.pub)
         except Exception as e:
             print(e)
 
-    def ping2msg(self, ping: models.TCPHost,publisher: rospy.Publisher):
+    def ping2msg(self, ping: models.TCPHost, publisher: rospy.Publisher):
         try:
             _msg = SignalInformation()
             _msg.is_alive = ping.is_alive
@@ -48,6 +46,11 @@ class getSignal:
             publisher.publish(_msg)
         except Exception as e:
             print(e)
+
+    async def ping_ips(self, ip_list):
+        for ip in ip_list:
+            await self.ping(ip_dict=ip)
+            await asyncio.sleep(0.1)
 
 if __name__ == '__main__':
     try:

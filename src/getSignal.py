@@ -41,7 +41,6 @@ class getSignal:
                 # Links the same key to the list of messages
                 self.msg_list.append({'_id': i})
                 rospy.loginfo("Ping to: " + self.ip_list[i]['ip'] + ':' + str(self.ip_list[i]['port']))
-                
         except:
             rospy.logerr("Failure to create the global lists")
             rospy.logerr("An exception occurred:", type(e).__name__,e.args)
@@ -67,7 +66,7 @@ class getSignal:
                 count=ip_dict['count'],
                 interval=ip_dict['interval'])
             # Adds the ROS Info_ping message to the message list for the ip
-            self.msg_list[ip_dict['_id']].update({'msg': self.ping2msg(ping=aping, publisher=self.message_pub)})
+            self.msg_list[ip_dict['_id']].update({'msg': self.ping2msg(ping=aping)})
             # Publishes the updated message to the ROS publisher
             await self.publish()
         except Exception as e:

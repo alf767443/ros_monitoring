@@ -47,6 +47,8 @@ class getSignal:
             self.ip_list.append(ip_dict)
         except Exception as e:
             print(e)
+        finally:
+            del self.ping_tasks[ip_dict['_id']]  # Remove a tarefa do dicionário de tarefas de ping
 
     def ping2msg(self, ping: models.TCPHost, publisher: rospy.Publisher):
         try:
@@ -67,11 +69,11 @@ class getSignal:
             print(e)
 
     async def ping_ips(self, ip_list):
-         while not rospy.is_shutdown():  # Executa enquanto o roscore estiver ativo
+        while not rospy.is_shutdown():  # Executa enquanto o roscore estiver ativo
             for ip in self.ip_list:
-                self.ping_tasks[ip['_id']] = asyncio.ensure_future(self.ping(ip_dict=ip))
-                self.ip_list.remove(ip)
-            await asyncio.sleep(0.1)
+                if ip['_id'] not in self.ping_tasks:
+                    self.ping_tasks[ip['_id']] = asyncio.ensure_future(self.ping(ip_dict=ip))
+        await asyncio.sleep(0.1)
         
     def __del__(self):
         self.loop.stop()

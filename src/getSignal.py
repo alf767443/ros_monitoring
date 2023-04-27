@@ -17,7 +17,7 @@ class getSignal:
 
         print(1)
         
-        asyncio.ensure_future(self.ping_ips(self.ip_list))  # Inicia a tarefa assíncrona para pingar os IPs
+        asyncio.run(self.ping_ips(self.ip_list))  # Inicia a tarefa assíncrona para pingar os IPs
         
         
         print(2)
@@ -64,9 +64,9 @@ class getSignal:
     async def ping_ips(self, ip_list):
          while not rospy.is_shutdown():  # Executa enquanto o roscore estiver ativo
             for ip in self.ip_list:
-                self.ping_tasks[ip] = asyncio.ensure_future(self.ping(ip_dict=ip))
+                await self.ping(ip_dict=ip)
                 self.ip_list.remove(ip)
-                await asyncio.sleep(0.1)
+            await asyncio.sleep(0.1)
         
     def __del__(self):
         self.loop.stop()

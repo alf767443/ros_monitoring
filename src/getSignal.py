@@ -47,7 +47,8 @@ class getSignal:
         
         # Launches the ping_ips task asynchronously
         try:
-            asyncio.run(self.ping_ips(self.ip_list))
+            
+            asyncio.run(self.main())
         except:
             rospy.logerr("Error on launch task asynchronously")
             rospy.logerr("An exception occurred:", type(e).__name__,e.args)
@@ -129,8 +130,7 @@ class getSignal:
         
 
 # Performs a read of the listed ips
-    async def ping_ips(self, ip_list):
-        pub = asyncio.ensure_future(self.publish())
+    async def ping_ips(self):
         # Keeps the loop going as long as ROS coreprint is running
         while not rospy.is_shutdown():
             # For all items of ip_list
@@ -148,6 +148,10 @@ class getSignal:
                 
             # Wait 0.1 s to start a new round of forcing so as not to overload processing
             await asyncio.sleep(0.1)
+
+    async def main(self):
+        await asyncio.gather(self.ping_ips(), self.publish())
+
 
 # On program interruption terminates asynchronous tasks
     def __del__(self):

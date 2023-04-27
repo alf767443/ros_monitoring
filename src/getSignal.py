@@ -5,7 +5,7 @@ from ros_monitoring.msg import SignalInformation
 
 import rospy, asyncio
 
-from config.pingList import IP2PING
+from pingList import IP2PING
 
 class getSignal:
     def __init__(self) -> None:

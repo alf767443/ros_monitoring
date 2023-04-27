@@ -1,5 +1,5 @@
 int32 is_alive
-int32 packets_send
+int32 packets_sent
 int32 packets_loss
 int32 packets_received
 int32 port

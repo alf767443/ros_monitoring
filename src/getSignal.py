@@ -14,7 +14,7 @@ class getSignal:
         self.loop = asyncio.get_event_loop()
         print(1)
         # Inicia a tarefa assíncrona
-        self.loop.create_task(self.ping_ips(IP2PING))
+        asyncio.run(self.ping_ips(IP2PING))
         print(2)
         rospy.spin()
 
@@ -30,6 +30,8 @@ class getSignal:
             print(4)
             self.ping2msg(ping=aping, publisher=self.pub)
             print(44)
+            self.ping(ip_dict=ip_dict)
+            print(9999999999999999)
         except Exception as e:
             print(e)
 

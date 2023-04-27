@@ -115,12 +115,13 @@ class getSignal:
             # Adds the message list to the ping field in the ROS message
             msg.list = list_msg
         except Exception as e:
+            print(e)
             rospy.logerr("Error on convert ROS message")
             rospy.logerr("An exception occurred:", type(e).__name__,e.args)
         
         # Publishes the message to the publisher
         try:    
-            self.message_pub.publish(_msg)
+            self.message_pub.publish(msg)
         except Exception as e:
             rospy.logerr("Error on publish the message")
             rospy.logerr("An exception occurred:", type(e).__name__,e.args)

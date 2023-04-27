@@ -69,7 +69,9 @@ class getSignal:
             # Adds the ROS Info_ping message to the message list for the ip
             self.msg_list[ip_dict['_id']].update({'msg': self.ping2msg(ping=aping)})
             # Publishes the updated message to the ROS publisher
-            # self.publish()
+            print('==========================')
+            print(self.msg_list)
+            print('==========================')
         except Exception as e:
             rospy.logerr("Error on ping to " + ip_dict['ip'] + ':' + str(ip_dict['port']))
             rospy.logerr("An exception occurred:", type(e).__name__,e.args)
@@ -111,8 +113,11 @@ class getSignal:
                 # Initiates the SignalInformation message 
                 msg = SignalInformation()
                 # Create a list with the informations
-                print(12)
+                print('#############################')
+                print(self.msg_list)
                 list_msg = [message['msg'] for message in self.msg_list]
+                print(list_msg)
+                print('#############################')
                 # Adds the message list to the ping field in the ROS message
                 print(13)
                 msg.list = list_msg

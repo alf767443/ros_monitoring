@@ -10,36 +10,48 @@ class getNodes:
     def __init__(self) -> None:
         # Start the node
         rospy.init_node('getROSNodes', anonymous=False)
-
         # Creates the publisher of the messages
         try:
             self.message_pub = rospy.Publisher("nodesStatus", NodesInformation, queue_size=10)
         except Exception as e:
             rospy.logerr("Failure to create publisher")
             rospy.logerr("An exception occurred:", type(e).__name__,e.args)
-
-
-        data = []
-        master = rosgraph.Master('/rosnode')
-        print('---------------------')
-        print(master)
-        while not rospy.is_shutdown():  
+        # Get ROS graph master
+        try:
+            master = rosgraph.Master('/rosnode')
+        except Exception as e:
+            rospy.logerr("Error on get Master")
+            rospy.logerr("An exception occurred:", type(e).__name__,e.args)
+        # Get ROS nodes
+        try:
+            node_list = rosnode.get_node_names()
+        except Exception as e:
+            rospy.logerr("Error on get ROS nodes")
+            rospy.logerr("An exception occurred:", type(e).__name__,e.args)
+        # Parsec the ROS nodes
+        nodes = []
+        for node in node_list:
             try:
-                node_list = rosnode.get_node_names()
-                print('---------------------')
-                print(node_list)
-                for node in node_list:
-                    print('---------------------')
-                    print(node)
-                    node_api = rosnode.get_api_uri(master, node)
-                    print('---------------------')
-                    print(node_api)
-                    node_info_msg = self.parsecNodeInfo(msg=rosnode.get_node_info_description(node))
-                print(data)
+                nodes.append(self.parsecNodeInfo(msg=rosnode.get_node_info_description(node)))
             except Exception as e:
-                print(e)
-            print('$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$')
-            rospy.sleep(1)
+                rospy.logerr("Error in the node parsec info:" + str(node))
+                rospy.logerr("An exception occurred:", type(e).__name__,e.args)
+                
+        # Create the topic message
+        try:
+            # Starts the message
+            msg = NodesInformation()
+            # Fill in the message
+            msg.nodes = nodes
+        except Exception as e:
+            rospy.logerr("Error on create the message")
+            rospy.logerr("An exception occurred:", type(e).__name__,e.args)
+        # Publish ROS message
+        self.message_pub.publish(msg)
+
+        # Keeps the node alive
+        rospy.spin()
+
 
 # Function to parsec the node informarion
     def parsecNodeInfo(self, msg):
@@ -64,7 +76,7 @@ class getNodes:
         try:
             # Starts the message
             _msg = Info_node()
-            # Set node message values
+            # Fill in the message
             _msg.node = str(node_name)
             _msg.publications = publications
             _msg.subscriptions = subscriptions

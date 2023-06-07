@@ -16,6 +16,8 @@ class getNodes:
         except Exception as e:
             rospy.logerr("Failure to create publisher")
             rospy.logerr("An exception occurred:", type(e).__name__,e.args)
+        # Keeps the node alive
+        rospy.spin()
         # Get ROS graph master
         try:
             master = rosgraph.Master('/rosnode')
@@ -50,8 +52,7 @@ class getNodes:
         # Publish ROS message
         self.message_pub.publish(msg)
 
-        # Keeps the node alive
-        rospy.spin()
+
 
 
 # Function to parsec the node informarion

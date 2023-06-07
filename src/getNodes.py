@@ -8,12 +8,6 @@ import rospy, bson, rosnode, rosgraph
 from datetime import datetime
 import re
 
-dataPath = {
-    'dataSource': Source.CeDRI_UGV, 
-    'dataBase'  : db.dataLake,
-    'collection': col.Nodes
-}
-
 class getNodes:
     def __init__(self) -> None:
         data = []
@@ -46,9 +40,8 @@ class getNodes:
                     'nodes': data, 
                     'dateTime': datetime.now()
                     }
-                if _createFile: 
-                    createFile(dataPath=dataPath, content=_data) 
-                    print('create file')
+                
+                print(_data)
             except Exception as e:
                 print(e)
             rate.sleep()

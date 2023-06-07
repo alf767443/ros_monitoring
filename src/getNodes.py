@@ -31,33 +31,29 @@ class getNodes:
                 for node in node_list:
                     print('---------------------')
                     print(node)
-                    _node = list(filter(lambda x: x['node'] == node, data))
+                    node_api = rosnode.get_api_uri(master, node)
                     print('---------------------')
-                    print(_node)
-                    if _node == []:
-                        _createFile = True
-                        node_api = rosnode.get_api_uri(master, node)
-                        print('---------------------')
-                        print(_node)
-                        (node_name, publications, subscriptions, services) = self.parsecInfo(msg=rosnode.get_node_info_description(node))
-                        print('---------------------')
-                        print( (node_name, publications, subscriptions, services) )
-                        connection = self.parsecConnection(rosnode.get_node_connection_info_description(node_api, master))
-                        print('---------------------')
-                        print( connection )
-                        bnode = {
-                            'node' : node_name,
-                            'pubs' : publications,
-                            'subs' : subscriptions,
-                            'serv' : services, 
-                            'conn' : connection
-                        }
-                        print(bnode)
-                        data.append(bnode)
+                    print(node)
+                    (node_name, publications, subscriptions, services) = self.parsecInfo(msg=rosnode.get_node_info_description(node))
+                    print('---------------------')
+                    print( (node_name, publications, subscriptions, services) )
+                    connection = self.parsecConnection(rosnode.get_node_connection_info_description(node_api, master))
+                    print('---------------------')
+                    print( connection )
+                    bnode = {
+                        'node' : node_name,
+                        'pubs' : publications,
+                        'subs' : subscriptions,
+                        'serv' : services, 
+                        'conn' : connection
+                    }
+                    print(bnode)
+                    data.append(bnode)
                 print(data)
             except Exception as e:
                 print(e)
-            rospy.sleep(1)
+            print('$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$')
+            rospy.sleep(30)
             
         
     

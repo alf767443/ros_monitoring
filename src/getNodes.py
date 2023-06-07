@@ -93,10 +93,13 @@ class getNodes:
         # Get publications
         pubs = re.findall(r"\* (.*) \[(.*)\]", re.search(r"Publications:(.*)Subscriptions", msg, re.DOTALL).group(1))
         publications = [{"topic": topic, "type": msg_type} for topic, msg_type in pubs]
+        _publications = [self.topic2msg({"topic": topic, "type": msg_type}) for topic, msg_type in pubs]
 
         # Get subscriptions
         subs = re.findall(r"\* (.*) \[(.*)\]", re.search(r"Subscriptions:(.*)Services", msg, re.DOTALL).group(1))
         subscriptions = [{"topic": topic, "type": msg_type} for topic, msg_type in subs]
+        _subscriptions = [self.topic2msg({"topic": topic, "type": msg_type}) for topic, msg_type in subs]
+
 
         # Get services
         services = re.findall(r"\* (.*)", re.search(r"Services:(.*)", msg, re.DOTALL).group(1))

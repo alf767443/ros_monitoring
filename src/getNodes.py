@@ -84,27 +84,38 @@ class getNodes:
         return parsed_data
 
     def parsecInfo(self, msg):
-        print('---555-----555-----555--INFO--555-----555-----555---')
-        print(msg)
-        print('---555-----555-----555--INFO--555-----555-----555---')
-        
-        # Get node name
-        node_name = re.search(r"Node \[(.*)\]", msg).group(1)
-        # Get publications
-        pubs = re.findall(r"\* (.*) \[(.*)\]", re.search(r"Publications:(.*)Subscriptions", msg, re.DOTALL).group(1))
-        publications = [{"topic": topic, "type": msg_type} for topic, msg_type in pubs]
-        _publications = [self.topic2msg({"topic": topic, "type": msg_type}) for topic, msg_type in pubs]
+        # Parsec node infomation
+        try:
+            # Get node name
+            node_name = re.search(r"Node \[(.*)\]", msg).group(1)
+            # Get publications
+            pubs = re.findall(r"\* (.*) \[(.*)\]", re.search(r"Publications:(.*)Subscriptions", msg, re.DOTALL).group(1))
+            # publications = [{"topic": topic, "type": msg_type} for topic, msg_type in pubs]
+            publications = [self.topic2msg({"topic": topic, "type": msg_type}) for topic, msg_type in pubs]
+            # Get subscriptions
+            subs = re.findall(r"\* (.*) \[(.*)\]", re.search(r"Subscriptions:(.*)Services", msg, re.DOTALL).group(1))
+            # subscriptions = [{"topic": topic, "type": msg_type} for topic, msg_type in subs]
+            subscriptions = [self.topic2msg({"topic": topic, "type": msg_type}) for topic, msg_type in subs]
+            # Get services
+            services = re.findall(r"\* (.*)", re.search(r"Services:(.*)", msg, re.DOTALL).group(1))
+        except Exception as e:
+            rospy.logerr("Error on node parsec: " + str(msg))
+            rospy.logerr("An exception occurred:", type(e).__name__,e.args)
+        # Convert to Info_node ROS message
+        try:
+            # Starts the message
+            _msg = Info_node()
+            # Set node message values
+            _msg.node = node_name
+            _msg.publications = publications
+            _msg.subscriptions = subscriptions
+            _msg.services = services
+            return _msg
+            # Fill in the message
+        except Exception as e:
+            rospy.logerr("Error on convert node to message: " + str(msg))
+            rospy.logerr("An exception occurred:", type(e).__name__,e.args)
 
-        # Get subscriptions
-        subs = re.findall(r"\* (.*) \[(.*)\]", re.search(r"Subscriptions:(.*)Services", msg, re.DOTALL).group(1))
-        subscriptions = [{"topic": topic, "type": msg_type} for topic, msg_type in subs]
-        _subscriptions = [self.topic2msg({"topic": topic, "type": msg_type}) for topic, msg_type in subs]
-
-
-        # Get services
-        services = re.findall(r"\* (.*)", re.search(r"Services:(.*)", msg, re.DOTALL).group(1))
-
-        return (node_name, publications, subscriptions, services)
 
     # Converts the topic information to ROS message TopicInfo
     def topic2msg(self, msg):

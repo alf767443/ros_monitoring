@@ -34,21 +34,8 @@ class getNodes:
                     node_api = rosnode.get_api_uri(master, node)
                     print('---------------------')
                     print(node_api)
-                    (node_name, publications, subscriptions, services) = self.parsecInfo(msg=rosnode.get_node_info_description(node))
-                    print('---------------------')
-                    print( (node_name, publications, subscriptions, services) )
+                    node_info_msg = self.parsecInfo(msg=rosnode.get_node_info_description(node))
                     # connection = self.parsecConnection(rosnode.get_node_connection_info_description(node_api, master))
-                    print('---------------------')
-                    # print( connection )
-                    bnode = {
-                        'node' : node_name,
-                        'pubs' : publications,
-                        'subs' : subscriptions,
-                        'serv' : services, 
-                        # 'conn' : connection
-                    }
-                    print(bnode)
-                    data.append(bnode)
                 print(data)
             except Exception as e:
                 print(e)

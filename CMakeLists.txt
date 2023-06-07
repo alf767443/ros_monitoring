@@ -50,10 +50,10 @@ find_package(catkin REQUIRED COMPONENTS
  add_message_files(
    FILES
    Info_ping.msg
-   SignalInformation.msg
-   TopicInfo.msg
    Info_node.msg
    NodesInformation.msg
+   SignalInformation.msg
+   TopicInfo.msg
  )
 
 ## Generate services in the 'srv' folder

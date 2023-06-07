@@ -106,7 +106,7 @@ class getNodes:
             # Starts the message
             _msg = Info_node()
             # Set node message values
-            _msg.node = node_name
+            _msg.node = str(node_name)
             _msg.publications = publications
             _msg.subscriptions = subscriptions
             _msg.services = services

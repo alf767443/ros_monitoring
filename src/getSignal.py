@@ -53,7 +53,7 @@ class getSignal:
             rospy.logerr("Error on launch task asynchronously")
             rospy.logerr("An exception occurred:", type(e).__name__,e.args)
 
-        # Keeps the no alive
+        # Keeps the node alive
         rospy.spin()
 
 # Function to ping against defined ips

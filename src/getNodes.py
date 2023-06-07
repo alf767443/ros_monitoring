@@ -12,11 +12,11 @@ class getNodes:
         rospy.init_node('getROSNodes', anonymous=False)
 
         # Creates the publisher of the messages
-        # try:
-        #     self.message_pub = rospy.Publisher("nodesStatus", NodesInformation, queue_size=10)
-        # except Exception as e:
-        #     rospy.logerr("Failure to create publisher")
-        #     rospy.logerr("An exception occurred:", type(e).__name__,e.args)
+        try:
+            self.message_pub = rospy.Publisher("nodesStatus", NodesInformation, queue_size=10)
+        except Exception as e:
+            rospy.logerr("Failure to create publisher")
+            rospy.logerr("An exception occurred:", type(e).__name__,e.args)
 
 
         data = []

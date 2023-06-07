@@ -118,7 +118,7 @@ class getNodes:
             print(msg)
             return _msg
         except Exception as e:
-            rospy.logerr("Error on convert topic to message: " + msg)
+            rospy.logerr("Error on convert topic to message: " + str(msg))
             rospy.logerr("An exception occurred:", type(e).__name__,e.args)
         
 

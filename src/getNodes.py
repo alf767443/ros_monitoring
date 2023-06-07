@@ -37,15 +37,15 @@ class getNodes:
                     (node_name, publications, subscriptions, services) = self.parsecInfo(msg=rosnode.get_node_info_description(node))
                     print('---------------------')
                     print( (node_name, publications, subscriptions, services) )
-                    connection = self.parsecConnection(rosnode.get_node_connection_info_description(node_api, master))
+                    # connection = self.parsecConnection(rosnode.get_node_connection_info_description(node_api, master))
                     print('---------------------')
-                    print( connection )
+                    # print( connection )
                     bnode = {
                         'node' : node_name,
                         'pubs' : publications,
                         'subs' : subscriptions,
                         'serv' : services, 
-                        'conn' : connection
+                        # 'conn' : connection
                     }
                     print(bnode)
                     data.append(bnode)
@@ -112,7 +112,7 @@ class getNodes:
             _msg.topic = str(msg.topic)
             _msg.msg_type = str(msg.type)
             # Returns the converted message
-            print(_msg)
+            print(msg)
             return _msg
         except Exception as e:
             rospy.logerr("Error on convert topic to message: " + msg)

@@ -18,7 +18,7 @@ class getNodes:
                 for node in node_list:
                     _node = list(filter(lambda x: x['node'] == node, data))
                     if _node == []:
-                        _createFile =True
+                        _createFile = True
                         node_api = rosnode.get_api_uri(master, node)
                         (node_name, publications, subscriptions, services) = self.parsecInfo(msg=rosnode.get_node_info_description(node))
                         connection = self.parsecConnection(rosnode.get_node_connection_info_description(node_api, master))
@@ -30,15 +30,7 @@ class getNodes:
                             'conn' : connection
                         }
                         data.append(bnode)
-                    else:
-                        _createFile =False
-                    
-                _data = {
-                    'nodes': data, 
-                    'dateTime': datetime.now()
-                    }
-                
-                print(_data)
+                print(data)
             except Exception as e:
                 print(e)
             rate.sleep()

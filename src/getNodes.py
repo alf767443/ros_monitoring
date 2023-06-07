@@ -33,7 +33,7 @@ class getNodes:
                     print(node)
                     node_api = rosnode.get_api_uri(master, node)
                     print('---------------------')
-                    print(node)
+                    print(node_api)
                     (node_name, publications, subscriptions, services) = self.parsecInfo(msg=rosnode.get_node_info_description(node))
                     print('---------------------')
                     print( (node_name, publications, subscriptions, services) )

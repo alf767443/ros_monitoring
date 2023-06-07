@@ -34,43 +34,15 @@ class getNodes:
                     node_api = rosnode.get_api_uri(master, node)
                     print('---------------------')
                     print(node_api)
-                    node_info_msg = self.parsecInfo(msg=rosnode.get_node_info_description(node))
-                    # connection = self.parsecConnection(rosnode.get_node_connection_info_description(node_api, master))
+                    node_info_msg = self.parsecNodeInfo(msg=rosnode.get_node_info_description(node))
                 print(data)
             except Exception as e:
                 print(e)
             print('$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$')
-            rospy.sleep(30)
-            
-        
-    
-    def parsecConnection(self, msg):
-        print('---555-----555-----555--CONN--555-----555-----555---')
-        print(msg)
-        print('---555-----555-----555--CONN--555-----555-----555---')
+            rospy.sleep(1)
 
-        parsed_data = {}
-
-        pid_match = re.search(r'Pid:\s*(\d+)', msg)
-        if pid_match:
-            parsed_data['Pid'] = int(pid_match.group(1))
-
-        # Extrai as conexões da msg e armazena no dicionário
-        connections_match = re.findall(r'\* topic:\s*(.*?)\n\s+\* to:\s*(.*?)\n\s+\* direction:\s*(.*?)\((\d+)\s-\s(.*?)\)\s\[(\d+)\]\n\s+\* transport:\s*(.*?)\n', msg, re.DOTALL)
-        parsed_data['Connections'] = []
-        for connection in connections_match:
-            parsed_data['Connections'].append({
-                'topic': connection[0],
-                'to': connection[1],
-                'direction': connection[2],
-                'port': int(connection[3]),
-                'address': connection[4],
-                'bytes': int(connection[5]),
-                'transport': connection[6]
-            })
-        return parsed_data
-
-    def parsecInfo(self, msg):
+# Function to parsec the node informarion
+    def parsecNodeInfo(self, msg):
         # Parsec node infomation
         try:
             # Get node name
@@ -103,8 +75,7 @@ class getNodes:
             rospy.logerr("Error on convert node to message: " + str(msg))
             rospy.logerr("An exception occurred:", type(e).__name__,e.args)
 
-
-    # Converts the topic information to ROS message TopicInfo
+# Converts the topic information to ROS message TopicInfo
     def topic2msg(self, msg):
         try:
             # Starts the message

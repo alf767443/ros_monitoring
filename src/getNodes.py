@@ -17,7 +17,7 @@ class getNodes:
         except Exception as e:
             rospy.logerr("Failure to create publisher")
             rospy.logerr("An exception occurred:", type(e).__name__,e.args)
-            
+
         while not rospy.is_shutdown():
             # Get ROS nodes
             try:
@@ -29,7 +29,6 @@ class getNodes:
             nodes = []
             for node in node_list:
                 try:
-                    print(node)
                     nodes.append(self.parsecNodeInfo(msg=rosnode.get_node_info_description(node)))
                 except Exception as e:
                     rospy.logerr("Error in the node parsec info:" + str(node))

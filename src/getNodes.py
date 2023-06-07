@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 from tcppinglib import tcpping
+# from ros_monitoring.msg import NodesInformation, Info_node
 
 import rospy, bson, rosnode, rosgraph
 from datetime import datetime
@@ -7,11 +8,19 @@ import re
 
 class getNodes:
     def __init__(self) -> None:
+        # Start the node
+        rospy.init_node('getROSNodesS', anonymous=False)
+
+        # Creates the publisher of the messages
+        # try:
+        #     self.message_pub = rospy.Publisher("nodesStatus", NodesInformation, queue_size=10)
+        # except Exception as e:
+        #     rospy.logerr("Failure to create publisher")
+        #     rospy.logerr("An exception occurred:", type(e).__name__,e.args)
+
+
         data = []
-        master = rosgraph.Master('/rosnode') 
-        _createFile = False
-        rospy.init_node('getNodes', anonymous=False)
-        rate = rospy.Rate(1)
+        master = rosgraph.Master('/rosnode')
         while not rospy.is_shutdown():  
             try:
                 node_list = rosnode.get_node_names()
@@ -33,7 +42,7 @@ class getNodes:
                 print(data)
             except Exception as e:
                 print(e)
-            rate.sleep()
+            rospy.sleep(1)
             
         
     

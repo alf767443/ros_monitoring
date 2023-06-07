@@ -115,7 +115,6 @@ class getNodes:
             _msg.topic = str(msg['topic'])
             _msg.msg_type = str(msg['type'])
             # Returns the converted message
-            print(msg)
             return _msg
         except Exception as e:
             rospy.logerr("Error on convert topic to message: " + str(msg))

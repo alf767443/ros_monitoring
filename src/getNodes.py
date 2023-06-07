@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 from tcppinglib import tcpping
-# from ros_monitoring.msg import NodesInformation, Info_node
+from ros_monitoring.msg import NodesInformation, Info_node, TopicInfo
 
 import rospy, bson, rosnode, rosgraph
 from datetime import datetime
@@ -87,21 +87,37 @@ class getNodes:
         print('---555-----555-----555--INFO--555-----555-----555---')
         print(msg)
         print('---555-----555-----555--INFO--555-----555-----555---')
-        #Extrai o nome do nó
+        
+        # Get node name
         node_name = re.search(r"Node \[(.*)\]", msg).group(1)
-        # print(msg)
-        # Extrai as publicações
+        # Get publications
         pubs = re.findall(r"\* (.*) \[(.*)\]", re.search(r"Publications:(.*)Subscriptions", msg, re.DOTALL).group(1))
         publications = [{"topic": topic, "type": msg_type} for topic, msg_type in pubs]
 
-        # Extrai as subscrições
+        # Get subscriptions
         subs = re.findall(r"\* (.*) \[(.*)\]", re.search(r"Subscriptions:(.*)Services", msg, re.DOTALL).group(1))
         subscriptions = [{"topic": topic, "type": msg_type} for topic, msg_type in subs]
 
-        # Extrai os serviços
+        # Get services
         services = re.findall(r"\* (.*)", re.search(r"Services:(.*)", msg, re.DOTALL).group(1))
+
         return (node_name, publications, subscriptions, services)
 
+    # Converts the topic information to ROS message TopicInfo
+    def topic2msg(self, msg):
+        try:
+            # Starts the message
+            _msg = TopicInfo()
+            # Fill in the message
+            _msg.topic = str(msg.topic)
+            _msg.msg_type = str(msg.type)
+            # Returns the converted message
+            print(_msg)
+            return _msg
+        except Exception as e:
+            rospy.logerr("Error on convert topic to message: " + msg)
+            rospy.logerr("An exception occurred:", type(e).__name__,e.args)
+        
 
 if __name__ == '__main__':
     try:

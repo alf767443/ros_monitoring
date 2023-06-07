@@ -58,6 +58,10 @@ class getNodes:
         
     
     def parsecConnection(self, msg):
+        print('---555-----555-----555--CONN--555-----555-----555---')
+        print(msg)
+        print('---555-----555-----555--CONN--555-----555-----555---')
+
         parsed_data = {}
 
         pid_match = re.search(r'Pid:\s*(\d+)', msg)
@@ -80,6 +84,9 @@ class getNodes:
         return parsed_data
 
     def parsecInfo(self, msg):
+        print('---555-----555-----555--INFO--555-----555-----555---')
+        print(msg)
+        print('---555-----555-----555--INFO--555-----555-----555---')
         #Extrai o nome do nó
         node_name = re.search(r"Node \[(.*)\]", msg).group(1)
         # print(msg)

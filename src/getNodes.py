@@ -1,7 +1,4 @@
 #!/usr/bin/env python3
-
-from GlobalSets.Mongo import DataSource as Source, Clients, DataBases as db, Collections as col
-from GlobalSets.localSave import createFile
 from tcppinglib import tcpping
 
 import rospy, bson, rosnode, rosgraph

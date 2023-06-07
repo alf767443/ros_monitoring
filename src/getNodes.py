@@ -112,8 +112,8 @@ class getNodes:
             # Starts the message
             _msg = TopicInfo()
             # Fill in the message
-            _msg.topic = str(msg.topic)
-            _msg.msg_type = str(msg.type)
+            _msg.topic = str(msg['topic'])
+            _msg.msg_type = str(msg['type'])
             # Returns the converted message
             print(msg)
             return _msg

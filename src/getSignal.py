@@ -15,7 +15,7 @@ class getSignal:
     def __init__(self) -> None:
         # Start the node
         rospy.init_node('getConnectionStatus', anonymous=False)
-
+        rospy.loginfo("Get signal topic started")
         # Creates the publisher of the messages
         try:
             self.message_pub = rospy.Publisher("connectionStatus", SignalInformation, queue_size=10)

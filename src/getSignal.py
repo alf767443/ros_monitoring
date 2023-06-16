@@ -1,12 +1,16 @@
 #!/usr/bin/env python3
 
-from tcppinglib import async_tcpping, models
-from ros_monitoring.msg import SignalInformation, Info_ping
-
-import rospy, asyncio
-
+# Import the ping list
 from pingList import IP2PING
 
+# Import mesages
+from ros_monitoring.msg import SignalInformation, Info_ping
+
+# Other imports
+from tcppinglib import async_tcpping, models
+import rospy, asyncio
+
+# Get signal class
 class getSignal:
     def __init__(self) -> None:
         # Start the node
@@ -47,7 +51,6 @@ class getSignal:
         
         # Launches the ping_ips task asynchronously
         try:
-            
             asyncio.run(self.main())
         except:
             rospy.logerr("Error on launch task asynchronously")

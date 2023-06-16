@@ -13,7 +13,7 @@ class getNodes:
     def __init__(self) -> None:
         # Start the node
         rospy.init_node('getROSNodes', anonymous=False)
-        rate = rospy.Rate(1)
+        rospy.loginfo("Get signal topic started")
         # Creates the publisher of the messages
         try:
             self.message_pub = rospy.Publisher("nodesStatus", NodesInformation, queue_size=10)
@@ -48,7 +48,8 @@ class getNodes:
                 rospy.logerr("An exception occurred:", type(e).__name__,e.args)
             # Publish ROS message
             self.message_pub.publish(msg)
-            rate.sleep()
+            # Wait 1 second to check again
+            rospy.sleep(1)
         # Keeps the node alive
         rospy.spin()
 

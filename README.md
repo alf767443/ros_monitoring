@@ -1,4 +1,4 @@
-# node_monitoring
+# ros_monitoring
 
 This ROS package is intended to collect data from topics, transform, store, manage and send them to a MongoDB server. Being designed to maintain the collection even in connection drops with the server.
 

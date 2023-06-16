@@ -1,11 +1,14 @@
 #!/usr/bin/env python3
-from tcppinglib import tcpping
+
+# Import mesages
 from ros_monitoring.msg import NodesInformation, Info_node, TopicInfo
 
-import rospy, bson, rosnode, rosgraph
+# Other imports
+import rospy, bson, rosnode, rosgraph, re
+from tcppinglib import tcpping
 from datetime import datetime
-import re
 
+# Get Nodes class
 class getNodes:
     def __init__(self) -> None:
         # Start the node
@@ -48,9 +51,6 @@ class getNodes:
             rate.sleep()
         # Keeps the node alive
         rospy.spin()
-
-
-
 
 # Function to parsec the node informarion
     def parsecNodeInfo(self, msg):

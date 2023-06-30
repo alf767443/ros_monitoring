@@ -28,20 +28,20 @@ The information published by this node is as follows:
 
     {
 	    nodes: 	[{
-		    node: -- node name.............as string
+		    node: -- node name.................as string
 		    publications: [{
-			    topic:	  -- topic name....as string
-			    msg_type: -- mesage type...as string
+			    topic:    -- topic name....as string
+			    msg_type: -- message type..as string
 		    }, ...],
 		    subscriptions: [{
-			    topic:	  -- topic name....as string
-			    msg_type: -- mesage type...as string
+			    topic:    -- topic name....as string
+			    msg_type: -- message type..as string
 		    }, ...],
-		    services: [   -- node name.....as string, ...]
+		    services: [ -- node name...........as string, ...]
 	    }, ...]
     }
 
-# Get the connection with a IP and port (*getSignal.py*)
+# Get the connection with an IP and port (*getSignal.py*)
 
 This topic should get the connection status between the computer running ROS, with other IPs pings periodically. The information is published in a message of type *SignalInformation* from *ros_monitoring* in the publisher */connectionStatus*.
 
@@ -50,11 +50,11 @@ This topic should get the connection status between the computer running ROS, wi
 To configure which IPs the node will ping, you must edit the file *pingList.py*, which is a dictionary in the following format:
 
     {	
-	    'ip': 		-- IP to ping......as string
-	    'port': 	-- Port to ping....as integer
+	    'ip': 	    -- IP to ping......as string
+	    'port': 	    -- Port to ping....as integer
 		'interval': -- Ping interval...as integer
-		'timeout': 	-- Timeout ping....as integer
-		'count': 	-- Number of trys..as integer
+		'timeout':  -- Timeout ping....as integer
+		'count':    -- Number of trys..as integer
 	}
 
 ## Published information (*/connectionStatus*)
@@ -67,11 +67,11 @@ The information published by this node is as follows:
 			packets_sent: 	  -- Number of sent packets.....as integer
 			packets_loss: 	  -- Number of loss packets.....as integer
 			packets_received: -- Number of received packets.as integer
-			port:			  -- Port it was sent to........as integer
-			rtt_max:		  -- Maximum connection RTT.....as float
-			rtt_min:		  -- Minimum connection RTT.....as float
-			rtt_avg:		  -- Average connection RTT.....as float
-			ip_target:		  -- IP it was ping.............as string
+			port:	          -- Port it was sent to........as integer
+			rtt_max:	  -- Maximum connection RTT.....as float
+			rtt_min:	  -- Minimum connection RTT.....as float
+			rtt_avg:	  -- Average connection RTT.....as float
+			ip_target:	  -- IP it was ping.............as string
 			}, ...]
 	 }
 
